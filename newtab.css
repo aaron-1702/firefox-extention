@@ -294,6 +294,7 @@ body {
   font-size: 0.95rem;
   line-height: 1.2;
   min-width: 0;
+  margin-left: 4px;
 }
 
 .tile-actions {
@@ -356,7 +357,7 @@ body {
 
 .tile-link-main:hover,
 .tile-link-main:focus-visible {
-  background: rgba(47, 138, 199, 0.14);
+  background: transparent;
 }
 
 .link-icon {

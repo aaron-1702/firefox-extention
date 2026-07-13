@@ -113,10 +113,14 @@ function faviconUrl(url) {
   return host ? `https://icons.duckduckgo.com/ip3/${host}.ico` : "";
 }
 
-function getTileHeight(size) {
-  if (size === "small") return 128;
-  if (size === "large") return 188;
-  return 152;
+function getTileHeight(size, linkCount = 0) {
+  const baseHeight = size === "small" ? 128 : size === "large" ? 188 : 152;
+  const baseVisibleLinks = size === "small" ? 2 : size === "large" ? 4 : 3;
+  const safeLinkCount = Number.isFinite(linkCount) ? Math.max(0, Math.floor(linkCount)) : 0;
+  const extraRows = Math.max(0, safeLinkCount - baseVisibleLinks);
+
+  // Grow the card when additional links would otherwise overflow.
+  return baseHeight + extraRows * 30;
 }
 
 function sizeFromLegacy(height) {
@@ -415,7 +419,7 @@ function calculateLayout(page, metrics, preview = null) {
     tileIds.forEach((tileId) => {
       const tile = page.tiles.find((entry) => entry.id === tileId) || (preview && preview.tile);
       if (!tile) return;
-      const height = getTileHeight(tile.size);
+      const height = getTileHeight(tile.size, tile.links?.length || 0);
       const box = {
         left: metrics.xForCol(col),
         top: yOffsets[col],
@@ -652,12 +656,12 @@ function createTileCard(tile, page, box, metrics) {
   addLink.className = "tile-action";
   addLink.type = "button";
   addLink.textContent = "+";
-  addLink.title = "Neuen Link hinzufuegen";
+  addLink.title = "Neuen Link hinzufügen";
   addLink.addEventListener("pointerdown", (event) => event.stopPropagation());
   addLink.addEventListener("click", async (event) => {
     event.stopPropagation();
     openMiniDialog({
-      title: "Link hinzufuegen",
+      title: "Link hinzufügen",
       x: event.clientX,
       y: event.clientY,
       fields: [
@@ -683,7 +687,7 @@ function createTileCard(tile, page, box, metrics) {
     event.stopPropagation();
     openContextMenu(event.clientX, event.clientY, [
       {
-        label: "Titel aendern",
+        label: "Titel ändern",
         action: async () => {
           openMiniDialog({
             title: "Kachel bearbeiten",
@@ -702,7 +706,7 @@ function createTileCard(tile, page, box, metrics) {
         }
       },
       {
-        label: "Groesse: Klein",
+        label: "Größe: Klein",
         action: async () => {
           tile.size = "small";
           await saveSettings();
@@ -710,7 +714,7 @@ function createTileCard(tile, page, box, metrics) {
         }
       },
       {
-        label: "Groesse: Mittel",
+        label: "Größe: Mittel",
         action: async () => {
           tile.size = "medium";
           await saveSettings();
@@ -718,7 +722,7 @@ function createTileCard(tile, page, box, metrics) {
         }
       },
       {
-        label: "Groesse: Gross",
+        label: "Größe: Groß",
         action: async () => {
           tile.size = "large";
           await saveSettings();
@@ -742,9 +746,9 @@ function createTileCard(tile, page, box, metrics) {
         }
       },
       {
-        label: "Kachel loeschen",
+        label: "Kachel löschen",
         action: async () => {
-          const ok = window.confirm(`Kachel ${tile.name} wirklich loeschen?`);
+          const ok = window.confirm(`Kachel ${tile.name} wirklich löschen?`);
           if (!ok) return;
           page.tiles = page.tiles.filter((item) => item.id !== tile.id);
           await saveSettings();
@@ -780,14 +784,8 @@ function createTileCard(tile, page, box, metrics) {
     icon.referrerPolicy = "no-referrer";
     icon.src = faviconUrl(link.url);
 
-    const fallback = document.createElement("span");
-    fallback.className = "link-icon-fallback";
-    fallback.textContent = (link.label.slice(0, 1) || "L").toUpperCase();
-    fallback.hidden = true;
-
     icon.addEventListener("error", () => {
       icon.hidden = true;
-      fallback.hidden = false;
     });
 
     const label = document.createElement("span");
@@ -795,7 +793,6 @@ function createTileCard(tile, page, box, metrics) {
     label.textContent = link.label;
 
     anchor.appendChild(icon);
-    anchor.appendChild(fallback);
     anchor.appendChild(label);
 
     const menuButton = document.createElement("button");
@@ -847,10 +844,10 @@ function createTileCard(tile, page, box, metrics) {
           }
         },
         {
-          label: "URL aendern",
+          label: "URL ändern",
           action: async () => {
             openMiniDialog({
-              title: "URL aendern",
+              title: "URL ändern",
               x: event.clientX,
               y: event.clientY,
               fields: [
@@ -866,7 +863,7 @@ function createTileCard(tile, page, box, metrics) {
           }
         },
         {
-          label: "Link loeschen",
+          label: "Link löschen",
           action: async () => {
             tile.links = tile.links.filter((item) => item.id !== link.id);
             await saveSettings();
