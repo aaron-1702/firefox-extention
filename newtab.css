@@ -436,6 +436,7 @@ body {
   background: transparent;
   cursor: pointer;
   font-size: 0.9rem;
+  color: var(--text);
   white-space: nowrap;
 }
 
