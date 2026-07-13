@@ -74,6 +74,14 @@ function status(message, isError = false) {
   target.style.color = isError ? "#ab2d2d" : "#14603f";
 }
 
+function applyTheme(themeValue) {
+  document.documentElement.dataset.theme = themeValue === "dark" ? "dark" : "light";
+}
+
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
 function cloneCategories(source) {
   return source.map((category) => ({
     name: category.name,
@@ -198,6 +206,8 @@ async function loadSettings() {
     align: ["left", "center", "right"].includes(raw.align) ? raw.align : DEFAULT_SETTINGS.align
   };
 
+  applyTheme(settings.theme);
+
   document.getElementById("title").value = settings.title;
   document.getElementById("subtitle").value = settings.subtitle;
   document.getElementById("showClock").checked = Boolean(settings.showClock);
@@ -216,6 +226,9 @@ async function loadSettings() {
 async function saveSettings(event) {
   event.preventDefault();
 
+  const data = await storage.get("startDesignerSettings");
+  const existing = isPlainObject(data.startDesignerSettings) ? data.startDesignerSettings : {};
+
   const imageUrl = document.getElementById("imageUrl").value.trim();
   if (imageUrl && !isValidHttpUrl(imageUrl)) {
     status("Bild-URL ist ungueltig. Bitte eine http(s)-Adresse verwenden.", true);
@@ -229,6 +242,7 @@ async function saveSettings(event) {
   }
 
   const payload = {
+    ...existing,
     title: document.getElementById("title").value.trim() || DEFAULT_SETTINGS.title,
     subtitle: document.getElementById("subtitle").value.trim() || DEFAULT_SETTINGS.subtitle,
     showClock: document.getElementById("showClock").checked,
@@ -243,6 +257,7 @@ async function saveSettings(event) {
   };
 
   await storage.set({ startDesignerSettings: payload });
+  applyTheme(payload.theme);
   status("Gespeichert. Oeffne einen neuen Tab, um das Ergebnis zu sehen.");
 }
 
@@ -252,11 +267,69 @@ async function resetSettings() {
   status("Auf Standardwerte zurueckgesetzt.");
 }
 
+function triggerDownload(filename, content) {
+  const blob = new Blob([content], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function exportSettings() {
+  const data = await storage.get("startDesignerSettings");
+  const raw = isPlainObject(data.startDesignerSettings) ? data.startDesignerSettings : {};
+  const backup = {
+    format: "startdesigner-backup-v1",
+    exportedAt: new Date().toISOString(),
+    settings: raw
+  };
+
+  const datePart = new Date().toISOString().slice(0, 10);
+  triggerDownload(`startdesigner-backup-${datePart}.json`, JSON.stringify(backup, null, 2));
+  status("Export fertig. Die JSON-Datei kannst du auf dem anderen Rechner importieren.");
+}
+
+async function importSettingsFromFile(file) {
+  const text = await file.text();
+  let parsed;
+
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    status("Import fehlgeschlagen: Datei ist kein gueltiges JSON.", true);
+    return;
+  }
+
+  const candidate = isPlainObject(parsed) && isPlainObject(parsed.settings) ? parsed.settings : parsed;
+  if (!isPlainObject(candidate)) {
+    status("Import fehlgeschlagen: Keine gueltigen Einstellungen gefunden.", true);
+    return;
+  }
+
+  await storage.set({ startDesignerSettings: candidate });
+  await loadSettings();
+  status("Import erfolgreich. Oeffne einen neuen Tab, um alles zu sehen.");
+}
+
 document.getElementById("settingsForm").addEventListener("submit", saveSettings);
 document.getElementById("resetButton").addEventListener("click", resetSettings);
 document.getElementById("addCategoryButton").addEventListener("click", () => {
   editorCategories.push({ name: "Neue Kategorie", links: [{ label: "", url: "" }] });
   renderCategoryEditor();
+});
+document.getElementById("exportSettingsButton").addEventListener("click", exportSettings);
+document.getElementById("importSettingsButton").addEventListener("click", () => {
+  document.getElementById("importSettingsInput").click();
+});
+document.getElementById("importSettingsInput").addEventListener("change", async (event) => {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  await importSettingsFromFile(file);
+  event.target.value = "";
 });
 
 loadSettings();

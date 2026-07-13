@@ -115,12 +115,17 @@ function faviconUrl(url) {
 
 function getTileHeight(size, linkCount = 0) {
   const baseHeight = size === "small" ? 128 : size === "large" ? 188 : 152;
-  const baseVisibleLinks = size === "small" ? 2 : size === "large" ? 4 : 3;
   const safeLinkCount = Number.isFinite(linkCount) ? Math.max(0, Math.floor(linkCount)) : 0;
-  const extraRows = Math.max(0, safeLinkCount - baseVisibleLinks);
 
-  // Grow the card when additional links would otherwise overflow.
-  return baseHeight + extraRows * 30;
+  if (safeLinkCount === 0) return baseHeight;
+
+  // Conservative estimate so link rows do not run outside the card.
+  const headerAndPadding = 58;
+  const rowHeight = 30;
+  const rowGap = 4;
+  const linksHeight = safeLinkCount * rowHeight + Math.max(0, safeLinkCount - 1) * rowGap;
+
+  return Math.max(baseHeight, headerAndPadding + linksHeight);
 }
 
 function sizeFromLegacy(height) {
@@ -889,10 +894,7 @@ function createTileCard(tile, page, box, metrics) {
     }
     const touchUntil = Number(card.dataset.touchRevealUntil || "0");
     if (touchUntil && Date.now() <= touchUntil) return;
-    const first = tile.links[0];
-    if (first && isValidHttpUrl(first.url)) {
-      window.open(first.url, "_blank", "noopener,noreferrer");
-    }
+    // Intentionally no default action on tile background click.
   });
 
   attachLongPressDrag(card, tile, page, metrics);

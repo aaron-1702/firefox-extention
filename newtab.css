@@ -608,18 +608,31 @@ body {
   color: var(--text);
 }
 
-.settings-link {
-  justify-self: end;
+.settings-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
-  padding: 8px 12px;
-  font-weight: 600;
-  color: var(--text);
   text-decoration: none;
-  background: var(--stat-bg);
+  font-size: 1.25rem;
+  color: var(--text);
+  background: var(--card-bg);
   border: 1px solid var(--card-border);
+  backdrop-filter: blur(var(--blur));
+  box-shadow: 0 8px 22px rgba(13, 26, 36, 0.26);
+  z-index: 65;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.settings-fab:hover,
+.settings-fab:focus-visible {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(13, 26, 36, 0.3);
 }
 
 .empty-state {
@@ -657,6 +670,11 @@ body {
   .topbar-right {
     flex-wrap: wrap;
     justify-content: flex-start;
+  }
+
+  .settings-fab {
+    right: 12px;
+    bottom: 12px;
   }
 }
 

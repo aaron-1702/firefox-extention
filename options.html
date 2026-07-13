@@ -15,59 +15,64 @@
     </section>
 
     <form id="settingsForm" class="settings-grid">
-      <label>
-        Titel
-        <input id="title" name="title" type="text" maxlength="80" required>
-      </label>
+      <section class="card form-panel">
+        <h2>Allgemein</h2>
+        <div class="field-grid">
+          <label>
+            Titel
+            <input id="title" name="title" type="text" maxlength="80" required>
+          </label>
 
-      <label>
-        Untertitel
-        <input id="subtitle" name="subtitle" type="text" maxlength="140" required>
-      </label>
+          <label>
+            Untertitel
+            <input id="subtitle" name="subtitle" type="text" maxlength="140" required>
+          </label>
 
-      <label class="row-inline">
-        <input id="showClock" name="showClock" type="checkbox">
-        Uhr anzeigen
-      </label>
+          <label class="row-inline">
+            <input id="showClock" name="showClock" type="checkbox">
+            Uhr anzeigen
+          </label>
 
-      <label>
-        Textausrichtung
-        <select id="align" name="align">
-          <option value="left">Links</option>
-          <option value="center">Mitte</option>
-          <option value="right">Rechts</option>
-        </select>
-      </label>
+          <label>
+            Textausrichtung
+            <select id="align" name="align">
+              <option value="left">Links</option>
+              <option value="center">Mitte</option>
+              <option value="right">Rechts</option>
+            </select>
+          </label>
 
-      <label>
-        Farbverlauf Start
-        <input id="bg1" name="bg1" type="color">
-      </label>
+          <label>
+            Farbverlauf Start
+            <input id="bg1" name="bg1" type="color">
+          </label>
 
-      <label>
-        Farbverlauf Ende
-        <input id="bg2" name="bg2" type="color">
-      </label>
+          <label>
+            Farbverlauf Ende
+            <input id="bg2" name="bg2" type="color">
+          </label>
 
-      <label>
-        Akzentfarbe
-        <input id="accent" name="accent" type="color">
-      </label>
+          <label>
+            Akzentfarbe
+            <input id="accent" name="accent" type="color">
+          </label>
 
-      <label>
-        Karten-Blur (0-24)
-        <input id="blur" name="blur" type="range" min="0" max="24" step="1">
-      </label>
+          <label>
+            Karten-Blur (0-24)
+            <input id="blur" name="blur" type="range" min="0" max="24" step="1">
+          </label>
 
-      <label>
-        Optionales Hintergrundbild (URL)
-        <input id="imageUrl" name="imageUrl" type="url" placeholder="https://example.com/image.jpg">
-      </label>
+          <label>
+            Optionales Hintergrundbild (URL)
+            <input id="imageUrl" name="imageUrl" type="url" placeholder="https://example.com/image.jpg">
+          </label>
 
-      <label>
-        Temperatur-Karte (z. B. 17 C)
-        <input id="temperature" name="temperature" type="text" maxlength="16" placeholder="17 C">
-      </label>
+          <label>
+            Temperatur-Karte (z. B. 17 C)
+            <input id="temperature" name="temperature" type="text" maxlength="16" placeholder="17 C">
+          </label>
+        </div>
+      </section>
 
       <section class="card editor-section">
         <div class="editor-head">
@@ -86,6 +91,9 @@
       <div class="actions">
         <button type="submit" class="primary">Speichern</button>
         <button type="button" id="resetButton" class="ghost">Zuruecksetzen</button>
+        <button type="button" id="exportSettingsButton" class="ghost">Exportieren</button>
+        <button type="button" id="importSettingsButton" class="ghost">Importieren</button>
+        <input id="importSettingsInput" type="file" accept="application/json" hidden>
       </div>
 
       <p id="statusText" class="status" aria-live="polite"></p>
