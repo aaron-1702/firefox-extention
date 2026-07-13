@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startbildschirm Designer - Einstellungen</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="settings-shell">
+    <section class="intro">
+      <p class="tag">Firefox Extension</p>
+      <h1>Startbildschirm Designer</h1>
+      <p>Konfiguriere Text, Farben, Hintergrundbild und dein Dashboard-Grid.</p>
+    </section>
+
+    <form id="settingsForm" class="settings-grid">
+      <label>
+        Titel
+        <input id="title" name="title" type="text" maxlength="80" required>
+      </label>
+
+      <label>
+        Untertitel
+        <input id="subtitle" name="subtitle" type="text" maxlength="140" required>
+      </label>
+
+      <label class="row-inline">
+        <input id="showClock" name="showClock" type="checkbox">
+        Uhr anzeigen
+      </label>
+
+      <label>
+        Textausrichtung
+        <select id="align" name="align">
+          <option value="left">Links</option>
+          <option value="center">Mitte</option>
+          <option value="right">Rechts</option>
+        </select>
+      </label>
+
+      <label>
+        Farbverlauf Start
+        <input id="bg1" name="bg1" type="color">
+      </label>
+
+      <label>
+        Farbverlauf Ende
+        <input id="bg2" name="bg2" type="color">
+      </label>
+
+      <label>
+        Akzentfarbe
+        <input id="accent" name="accent" type="color">
+      </label>
+
+      <label>
+        Karten-Blur (0-24)
+        <input id="blur" name="blur" type="range" min="0" max="24" step="1">
+      </label>
+
+      <label>
+        Optionales Hintergrundbild (URL)
+        <input id="imageUrl" name="imageUrl" type="url" placeholder="https://example.com/image.jpg">
+      </label>
+
+      <label>
+        Temperatur-Karte (z. B. 17 C)
+        <input id="temperature" name="temperature" type="text" maxlength="16" placeholder="17 C">
+      </label>
+
+      <section class="card editor-section">
+        <div class="editor-head">
+          <h2>Kacheln und Links</h2>
+          <button type="button" id="addCategoryButton" class="ghost">Kategorie hinzufuegen</button>
+        </div>
+        <p class="editor-note">Du kannst Kategorien und Links direkt anlegen, loeschen und umbenennen.</p>
+        <div id="categoryEditor" class="category-editor"></div>
+      </section>
+
+      <section class="card help-section">
+        <h2>Hintergrund anpassen</h2>
+        <p>Hier in den Einstellungen unter Farbverlauf Start/Ende und Optionales Hintergrundbild (URL).</p>
+      </section>
+
+      <div class="actions">
+        <button type="submit" class="primary">Speichern</button>
+        <button type="button" id="resetButton" class="ghost">Zuruecksetzen</button>
+      </div>
+
+      <p id="statusText" class="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <script src="options.js"></script>
+</body>
+</html>

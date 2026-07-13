@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startbildschirm</title>
+  <link rel="stylesheet" href="newtab.css">
+</head>
+<body>
+  <div id="pageBackdrop" class="page-backdrop"></div>
+  <main class="dashboard-shell" id="shell">
+    <header class="topbar card-glass">
+      <nav class="chip-nav" aria-label="Bereiche">
+        <button class="chip chip-active" type="button">Home</button>
+        <button class="chip" type="button">Personal</button>
+        <button class="chip" type="button">Learning</button>
+        <button class="chip" type="button">Projects</button>
+      </nav>
+
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">&#128269;</span>
+        <input id="searchInput" class="search-input" type="search" placeholder="Suchen" autocomplete="off">
+      </div>
+
+      <div class="mini-stats">
+        <article class="mini-stat">
+          <span class="mini-label">Temperatur</span>
+          <strong id="tempValue">--</strong>
+        </article>
+        <article class="mini-stat">
+          <span class="mini-label">Fokus heute</span>
+          <strong id="focusValue">00m</strong>
+        </article>
+        <article class="mini-stat">
+          <span class="mini-label">Uhr</span>
+          <strong id="clockHeader">--:--</strong>
+        </article>
+      </div>
+    </header>
+
+    <section class="title-row">
+      <p class="hero-label">Dashboard</p>
+      <h1 id="heroTitle">Willkommen</h1>
+      <p id="heroSubtitle">Mach diese Seite zu deiner eigenen.</p>
+    </section>
+
+    <section class="content-grid">
+      <div id="categoryGrid" class="category-grid"></div>
+
+      <aside class="utility-column">
+        <section class="widget card-glass" id="calendarWidget">
+          <h2 id="calendarTitle">Monat Jahr</h2>
+          <div id="calendarWeekdays" class="calendar-weekdays"></div>
+          <div id="calendarGrid" class="calendar-grid"></div>
+        </section>
+
+        <section class="widget card-glass" id="pomodoroWidget">
+          <h2>Pomodoro</h2>
+          <div class="pomodoro-modes">
+            <button type="button" class="mode-chip mode-active" data-mode="focus">Fokus</button>
+            <button type="button" class="mode-chip" data-mode="short">Kurze Pause</button>
+            <button type="button" class="mode-chip" data-mode="long">Lange Pause</button>
+          </div>
+          <p id="pomodoroTimer" class="pomodoro-time">25:00</p>
+          <div class="pomodoro-actions">
+            <button id="pomodoroStart" type="button" class="pomodoro-button">Start</button>
+            <button id="pomodoroReset" type="button" class="pomodoro-button ghost">Reset</button>
+          </div>
+        </section>
+
+        <a class="settings-link" href="options.html" target="_blank" rel="noopener noreferrer">Anpassen</a>
+      </aside>
+    </section>
+
+    <div id="clockWrap" class="clock-wrap" aria-live="polite">
+      <span id="clock" class="clock">--:--:--</span>
+    </div>
+    <p id="emptyState" class="empty-state" hidden>Keine Treffer gefunden.</p>
+  </main>
+
+  <script src="newtab.js"></script>
+</body>
+</html>
