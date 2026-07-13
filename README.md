@@ -9,8 +9,11 @@ Mit dieser Firefox-Extension kannst du deine New-Tab-Seite und Startseite gestal
 - Titel und Untertitel frei konfigurierbar
 - Uhr ein/aus
 - Farbverlauf und Akzentfarbe anpassbar
-- Optionales Hintergrundbild per URL
-- Dashboard-Kacheln mit Kategorien (Work, Social, Learning, ...)
+- Wallpaper Upload (png/jpg/mp4) direkt auf der Startseite
+- Direktes In-Place-Editing ohne separaten Bearbeitungsmodus
+- Kacheln per Long-Press + Drag frei positionierbar
+- Kachelmenues (+ und ...) sowie Linkmenue (⋮) direkt in jeder Kachel
+- Pages koennen direkt in der Leiste erstellt werden
 - Kalender-Widget und Pomodoro-Widget
 
 ## Installation (temporar)
@@ -23,18 +26,15 @@ Mit dieser Firefox-Extension kannst du deine New-Tab-Seite und Startseite gestal
 ## Nutzung
 
 1. Einen neuen Tab oeffnen -> die eigene Startseite erscheint.
-2. Oben rechts auf `Anpassen` klicken oder die Add-on-Einstellungen in Firefox oeffnen.
-3. Einstellungen speichern und neuen Tab oeffnen.
+2. Kachel verschieben: Kachel kurz gedrueckt halten und dann ziehen.
+3. In jeder Kachel:
+	- `+` fuegt einen Link hinzu
+	- `...` oeffnet Kachel-Einstellungen (Name, Groesse, Darstellung, Loeschen)
+	- bei jedem Link oeffnet `⋮` das Link-Menue (Bearbeiten/Umbenennen/URL/Loeschen)
+4. Auf freie Flaeche klicken -> neue Kachel an der Position erstellen.
+5. Wallpaper oben rechts mit `Wallpaper` hochladen oder mit `Clear` entfernen.
 
-### Link-Format fuer Dashboard-Kacheln
-
-In den Einstellungen unter `Dashboard-Links` gilt pro Zeile:
-
-`Kategorie|Name|https://url`
-
-Beispiel:
-
-`Work|Gmail|https://mail.google.com`
+Hinweis: Der separate Layout-Bearbeiten-Modus wurde entfernt. Alles ist direkt auf der Startseite bearbeitbar.
 
 ## Damit es beim Firefox-Start angezeigt wird
 

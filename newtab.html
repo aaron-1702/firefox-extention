@@ -8,33 +8,39 @@
 </head>
 <body>
   <div id="pageBackdrop" class="page-backdrop"></div>
+  <video id="bgVideo" class="bg-video" autoplay muted loop playsinline hidden></video>
+
   <main class="dashboard-shell" id="shell">
     <header class="topbar card-glass">
-      <nav class="chip-nav" aria-label="Bereiche">
-        <button class="chip chip-active" type="button">Home</button>
-        <button class="chip" type="button">Personal</button>
-        <button class="chip" type="button">Learning</button>
-        <button class="chip" type="button">Projects</button>
-      </nav>
-
-      <div class="search-wrap">
-        <span class="search-icon" aria-hidden="true">&#128269;</span>
-        <input id="searchInput" class="search-input" type="search" placeholder="Suchen" autocomplete="off">
+      <div class="topbar-left">
+        <nav id="chipNav" class="chip-nav" aria-label="Pages"></nav>
+        <button id="addPageButton" class="chip chip-add" type="button" title="Neue Page">+</button>
       </div>
 
-      <div class="mini-stats">
-        <article class="mini-stat">
-          <span class="mini-label">Temperatur</span>
-          <strong id="tempValue">--</strong>
-        </article>
-        <article class="mini-stat">
-          <span class="mini-label">Fokus heute</span>
-          <strong id="focusValue">00m</strong>
-        </article>
-        <article class="mini-stat">
-          <span class="mini-label">Uhr</span>
-          <strong id="clockHeader">--:--</strong>
-        </article>
+      <form id="searchForm" class="search-wrap" role="search">
+        <span class="search-icon" aria-hidden="true">&#128269;</span>
+        <input id="searchInput" class="search-input" type="search" placeholder="Web suchen oder URL eingeben" autocomplete="off">
+      </form>
+
+      <div class="topbar-right">
+        <div class="mini-stats">
+          <article class="mini-stat">
+            <span class="mini-label">Temperatur</span>
+            <strong id="tempValue">--</strong>
+          </article>
+          <article class="mini-stat">
+            <span class="mini-label">Fokus heute</span>
+            <strong id="focusValue">00m</strong>
+          </article>
+          <article class="mini-stat" id="clockStat">
+            <span class="mini-label">Uhr</span>
+            <strong id="clockHeader">--:--</strong>
+          </article>
+        </div>
+        <button id="themeToggle" class="chip" type="button">Darkmode</button>
+        <button id="uploadBackgroundButton" class="chip" type="button">Wallpaper</button>
+        <button id="clearBackgroundButton" class="chip" type="button">Clear</button>
+        <input id="backgroundUploadInput" type="file" accept="image/png,image/jpeg,image/jpg,video/mp4" hidden>
       </div>
     </header>
 
@@ -45,7 +51,7 @@
     </section>
 
     <section class="content-grid">
-      <div id="categoryGrid" class="category-grid"></div>
+      <div id="tileBoard" class="tile-board" aria-label="Kachelbereich"></div>
 
       <aside class="utility-column">
         <section class="widget card-glass" id="calendarWidget">
@@ -72,11 +78,39 @@
       </aside>
     </section>
 
-    <div id="clockWrap" class="clock-wrap" aria-live="polite">
-      <span id="clock" class="clock">--:--:--</span>
-    </div>
-    <p id="emptyState" class="empty-state" hidden>Keine Treffer gefunden.</p>
+    <p id="emptyState" class="empty-state" hidden>Keine Kacheln vorhanden. Klicke auf freie Flaeche, um eine neue Kachel anzulegen.</p>
   </main>
+
+  <div id="contextMenu" class="context-menu" hidden></div>
+
+  <div id="quickCreate" class="quick-create card-glass" hidden>
+    <h3>Neue Kachel</h3>
+    <label>
+      Name
+      <input id="quickTileName" type="text" maxlength="32" placeholder="Kachelname">
+    </label>
+    <label>
+      Erster Linkname (optional)
+      <input id="quickLinkLabel" type="text" maxlength="40" placeholder="z. B. Gmail">
+    </label>
+    <label>
+      Erste URL (optional)
+      <input id="quickLinkUrl" type="url" placeholder="https://example.com">
+    </label>
+    <div class="quick-create-actions">
+      <button id="quickCreateSave" class="chip" type="button">Erstellen</button>
+      <button id="quickCreateCancel" class="chip" type="button">Abbrechen</button>
+    </div>
+  </div>
+
+  <div id="miniDialog" class="mini-dialog card-glass" hidden>
+    <h3 id="miniDialogTitle">Bearbeiten</h3>
+    <div id="miniDialogFields" class="mini-dialog-fields"></div>
+    <div class="mini-dialog-actions">
+      <button id="miniDialogSave" class="chip" type="button">Speichern</button>
+      <button id="miniDialogCancel" class="chip" type="button">Abbrechen</button>
+    </div>
+  </div>
 
   <script src="newtab.js"></script>
 </body>

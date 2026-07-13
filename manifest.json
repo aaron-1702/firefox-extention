@@ -3,7 +3,7 @@
   "name": "Startbildschirm Designer",
   "version": "1.0.0",
   "description": "Gestalte deinen Firefox-Startbildschirm als eigene New-Tab-Seite.",
-  "permissions": ["storage"],
+  "permissions": ["storage", "search", "unlimitedStorage"],
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
