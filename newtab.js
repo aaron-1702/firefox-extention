@@ -56,6 +56,7 @@ const state = {
   activePageId: "home",
   layout: {
     metrics: null,
+    tileHeightMetrics: null,
     boxes: new Map(),
     orderedIdsByColumn: []
   },
@@ -113,17 +114,117 @@ function faviconUrl(url) {
   return host ? `https://icons.duckduckgo.com/ip3/${host}.ico` : "";
 }
 
+function invalidateTileHeightMetrics() {
+  state.layout.tileHeightMetrics = null;
+}
+
+function buildTileHeightProbe(linkCount, width) {
+  const card = document.createElement("article");
+  card.className = "tile-card";
+  card.style.position = "fixed";
+  card.style.left = "-10000px";
+  card.style.top = "-10000px";
+  card.style.width = `${width}px`;
+  card.style.height = "auto";
+  card.style.visibility = "hidden";
+  card.style.pointerEvents = "none";
+
+  const header = document.createElement("header");
+  header.className = "tile-header";
+
+  const title = document.createElement("h3");
+  title.className = "tile-title";
+  title.textContent = "Probe";
+
+  const actions = document.createElement("div");
+  actions.className = "tile-actions";
+  const actionButton = document.createElement("button");
+  actionButton.className = "tile-action";
+  actionButton.type = "button";
+  actionButton.textContent = "+";
+  actions.appendChild(actionButton);
+
+  header.appendChild(title);
+  header.appendChild(actions);
+  card.appendChild(header);
+
+  const links = document.createElement("ul");
+  links.className = "tile-links";
+
+  for (let i = 0; i < linkCount; i += 1) {
+    const row = document.createElement("li");
+    row.className = "tile-link";
+
+    const anchor = document.createElement("a");
+    anchor.className = "tile-link-main";
+    anchor.href = "#";
+
+    const icon = document.createElement("span");
+    icon.className = "link-icon-fallback";
+    icon.textContent = "A";
+
+    const label = document.createElement("span");
+    label.className = "link-label";
+    label.textContent = "Beispiel Link";
+
+    const menuButton = document.createElement("button");
+    menuButton.className = "link-menu-btn";
+    menuButton.type = "button";
+    menuButton.textContent = "⋮";
+
+    anchor.appendChild(icon);
+    anchor.appendChild(label);
+    row.appendChild(anchor);
+    row.appendChild(menuButton);
+    links.appendChild(row);
+  }
+
+  card.appendChild(links);
+  return card;
+}
+
+function readMeasuredTileHeightMetrics() {
+  const fallback = { headerAndPadding: 58, rowStride: 34 };
+  if (!document?.body) return fallback;
+
+  const width = Math.max(170, Math.min(TILE_TARGET_WIDTH, state.layout.metrics?.colWidth || TILE_TARGET_WIDTH));
+
+  const probeOne = buildTileHeightProbe(1, width);
+  const probeTwo = buildTileHeightProbe(2, width);
+  document.body.appendChild(probeOne);
+  document.body.appendChild(probeTwo);
+
+  const h1 = probeOne.getBoundingClientRect().height;
+  const h2 = probeTwo.getBoundingClientRect().height;
+  probeOne.remove();
+  probeTwo.remove();
+
+  const measuredStride = Math.round(h2 - h1);
+  if (!Number.isFinite(measuredStride) || measuredStride <= 0) return fallback;
+
+  const measuredHeader = Math.round(h1 - measuredStride);
+  return {
+    headerAndPadding: Math.max(44, measuredHeader),
+    rowStride: Math.max(28, measuredStride)
+  };
+}
+
+function getTileHeightMetrics() {
+  if (!state.layout.tileHeightMetrics) {
+    state.layout.tileHeightMetrics = readMeasuredTileHeightMetrics();
+  }
+  return state.layout.tileHeightMetrics;
+}
+
 function getTileHeight(size, linkCount = 0) {
   const baseHeight = size === "small" ? 128 : size === "large" ? 188 : 152;
   const safeLinkCount = Number.isFinite(linkCount) ? Math.max(0, Math.floor(linkCount)) : 0;
 
   if (safeLinkCount === 0) return baseHeight;
 
-  // Conservative estimate so link rows do not run outside the card.
-  const headerAndPadding = 58;
-  const rowHeight = 30;
-  const rowGap = 4;
-  const linksHeight = safeLinkCount * rowHeight + Math.max(0, safeLinkCount - 1) * rowGap;
+  // Measured from real DOM metrics to stay stable across OS/font differences.
+  const { headerAndPadding, rowStride } = getTileHeightMetrics();
+  const linksHeight = safeLinkCount * rowStride;
 
   return Math.max(baseHeight, headerAndPadding + linksHeight);
 }
@@ -1253,8 +1354,16 @@ function wireGeneralEvents() {
   });
 
   window.addEventListener("resize", () => {
+    invalidateTileHeightMetrics();
     renderAll();
   });
+
+  if (document.fonts && typeof document.fonts.addEventListener === "function") {
+    document.fonts.addEventListener("loadingdone", () => {
+      invalidateTileHeightMetrics();
+      renderAll();
+    });
+  }
 
   wireBoardClickCreate();
 }
