@@ -1,4 +1,4 @@
-# Startbildschirm Designer (Firefox Extension)
+# Startbildschirm Designer (Firefox Extension) (Beta)
 
 Mit dieser Firefox-Extension kannst du deine New-Tab-Seite und Startseite gestalten.
 
