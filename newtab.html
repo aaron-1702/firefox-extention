@@ -74,6 +74,25 @@
           </div>
         </section>
 
+        <section class="widget card-glass league-widget" id="leagueWidget" aria-labelledby="leagueTitle">
+          <h2 id="leagueTitle">Frei von League</h2>
+          <div class="league-counter" role="timer" aria-label="Zeit ohne League of Legends">
+            <p id="leagueDays" class="league-days">0 Tage</p>
+            <p id="leagueTimer" class="pomodoro-time league-time">00:00:00</p>
+          </div>
+          <p id="leagueSince" class="league-meta">Zähler wird geladen …</p>
+          <p id="leagueStatus" class="league-status" role="status" hidden></p>
+
+          <details class="league-settings" id="leagueSettings">
+            <summary>Startdatum ändern</summary>
+            <form id="leagueDateForm" class="league-form">
+              <label for="leagueLastPlayed">Ohne League seit</label>
+              <input id="leagueLastPlayed" type="datetime-local" required>
+              <button type="submit" class="pomodoro-button ghost">Datum übernehmen</button>
+            </form>
+          </details>
+        </section>
+
       </aside>
     </section>
 
@@ -114,5 +133,6 @@
   </div>
 
   <script src="newtab.js"></script>
+  <script src="league-timer.js"></script>
 </body>
 </html>

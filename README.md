@@ -15,6 +15,7 @@ Mit dieser Firefox-Extension kannst du deine New-Tab-Seite und Startseite gestal
 - Kachelmenues (+ und ...) sowie Linkmenue (⋮) direkt in jeder Kachel
 - Pages koennen direkt in der Leiste erstellt werden
 - Kalender-Widget und Pomodoro-Widget
+- Lokaler "Frei von League"-Zaehler unter Pomodoro
 
 ## Installation (temporar)
 
@@ -49,3 +50,28 @@ Stelle deshalb in Firefox ein:
 ## Hinweis
 
 Die temporare Installation bleibt nur bis zum naechsten Firefox-Neustart aktiv.
+
+## Frei von League
+
+Unter Pomodoro zeigt der Zaehler Tage und Stunden seit deiner letzten League-Partie.
+Beim ersten Oeffnen startet er bei null. Der Zeitpunkt wird lokal gespeichert: Neue
+Tabs, ein Firefox-Neustart oder ein ausgeschalteter Rechner setzen ihn nicht zurueck.
+Das gilt bei dauerhaft installierter Erweiterung; bei einer temporaeren Installation
+muss die Erweiterung nach einem Firefox-Neustart erneut geladen werden.
+
+- Unter **Startdatum aendern** kannst du das Datum und die Uhrzeit deiner letzten Partie setzen.
+- Nach einer Partie aktualisierst du den Zaehler selbst; Spiele werden nicht automatisch erkannt.
+
+Der Zaehler arbeitet ausschliesslich lokal. Er speichert nur den Startzeitpunkt
+und synchronisiert Aenderungen zwischen offenen New-Tab-Seiten. Fuer dieses Widget
+werden keine Netzwerkabfragen ausgefuehrt. Alte Verbindungsdaten werden beim Laden
+der aktualisierten Erweiterung entfernt.
+
+Nach einer Code-Aenderung die Erweiterung unter `about:debugging#/runtime/this-firefox`
+**neu laden**, damit die Aenderungen und die Bereinigung gespeicherter Daten aktiv werden.
+
+### Pruefungen
+
+Mit Node.js (ohne weitere Pakete): `node --test tests/league-background.test.cjs tests/league-timer.test.cjs`
+Die Tests pruefen gespeicherte Zeitpunkte, mehrere Tabs, die Umstellung alter
+Daten und die manuelle Bedienung des Zaehlers.

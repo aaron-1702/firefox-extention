@@ -520,6 +520,8 @@ body {
 .utility-column {
   display: grid;
   gap: 12px;
+  align-content: start;
+  align-items: start;
 }
 
 .widget {
@@ -608,6 +610,100 @@ body {
   color: var(--text);
 }
 
+.league-meta,
+.league-status {
+  color: var(--text-soft);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.league-counter {
+  margin: 12px 0 8px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.league-days {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.league-time {
+  margin: 4px 0 0;
+}
+
+.league-meta {
+  margin: 0;
+  text-align: center;
+}
+
+.league-status {
+  margin: 12px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.league-status[data-error="true"] {
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding-left: 8px;
+}
+
+.league-settings {
+  margin-top: 12px;
+  border-top: 1px solid var(--input-border);
+  padding-top: 10px;
+  font-size: 0.78rem;
+}
+
+.league-settings summary {
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+.league-form {
+  display: grid;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.league-form label {
+  font-weight: 600;
+}
+
+.league-form input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+  color-scheme: light;
+}
+
+.league-form button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+:root[data-theme="dark"] .league-form input {
+  color-scheme: dark;
+}
+
+.league-widget button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.league-widget :is(button, input, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 .settings-fab {
   position: fixed;
   right: 18px;
@@ -652,6 +748,10 @@ body {
   .utility-column {
     grid-template-columns: repeat(2, minmax(220px, 1fr));
   }
+
+  .league-widget {
+    grid-column: 2;
+  }
 }
 
 @media (max-width: 780px) {
@@ -665,6 +765,10 @@ body {
 
   .utility-column {
     grid-template-columns: 1fr;
+  }
+
+  .league-widget {
+    grid-column: auto;
   }
 
   .topbar-right {
